@@ -16,3 +16,6 @@ class Product(models.Model):
     stock = models.IntegerField()
     img = models.ImageField(upload_to='img_Prodect', null = True)
     category =  models.ManyToManyField( Category, related_name='prodects')
+
+    def __str__(self):
+        return self.name
