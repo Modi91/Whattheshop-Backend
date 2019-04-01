@@ -1,5 +1,10 @@
 from django.db import models
 
+# from django.contrib.auth.models import User
+
+
+
+
 class Category (models.Model):
     """docstring for category """
     title = models.CharField(max_length=20)
@@ -8,14 +13,36 @@ class Category (models.Model):
         return self.title
 
 
+
 class Product(models.Model):
     """docstring for Prodect"""
     name = models.CharField(max_length=20)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    price = models.IntegerField()
     description = models.TextField()
     stock = models.IntegerField()
     img = models.ImageField(upload_to='img_Prodect', null = True)
-    categories =  models.ManyToManyField( Category, related_name='products')
-
+    category =  models.ManyToManyField( Category, related_name='prodects')
     def __str__(self):
         return self.name
+
+
+
+
+# class Stock(models.Model):
+#   """docstring for Stack"""
+#   Prodect = models.ForeignKey(Prodect,on_delete=models.CASCADE,
+#       related_name='orders')
+#   user = models.ForeignKey(User,on_delete=models.CASCADE,
+#       related_name='orders')
+#   quantity = models.IntegerField()
+
+
+# class Cart(models.Model):
+#   """docstring for Cart"""
+#   item = models.ForeignKey(Prodect,on_delete=models.CASCADE,
+#       related_name='orders')
+#   user = models.ForeignKey(User,on_delete=models.CASCADE,
+#       related_name='orders')
+#   total = models.IntegerField()
+
