@@ -19,8 +19,8 @@ class Product(models.Model):
     description = models.TextField()
     stock = models.IntegerField()
     img = models.ImageField(upload_to='img_Prodect', null = True)
-    img3 = models.ImageField(upload_to='img_Prodect', null = True)
-    img2= models.ImageField(upload_to='img_Prodect', null = True)
+    img2 = models.ImageField(upload_to='img_Prodect', null = True)
+    img3= models.ImageField(upload_to='img_Prodect', null = True)
     categories =  models.ManyToManyField( Category, related_name='prodects')
 
     def __str__(self):

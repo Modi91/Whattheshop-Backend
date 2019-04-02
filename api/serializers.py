@@ -41,6 +41,8 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 			'description',
 			'stock',
 			'img',
+			'img2',
+			'img3',
 			'categories'
 		]
 
