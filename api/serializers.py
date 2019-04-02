@@ -29,7 +29,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
 class ProductListSerializer(serializers.ModelSerializer):
 	class Meta:
 		model= Product
-		fields= ['name', 'price', 'stock', ]
+		fields= ['name', 'price', 'stock', 'img', ]
 
 class ProductDetailSerializer(serializers.ModelSerializer):
 	categories= CategoryListSerializer(many=True)
