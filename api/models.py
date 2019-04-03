@@ -9,8 +9,6 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
-
-
 class Product(models.Model):
     name = models.CharField(max_length=20)
     price = models.DecimalField(decimal_places=2, max_digits=10)
@@ -24,13 +22,17 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-
 class Order(models.Model):
     user= models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     total= models.DecimalField(decimal_places=2,  max_digits=10)
 
+    def __str__(self):
+        return self.user.username
+
 class OrderProduct(models.Model):
-    product= models.ForeignKey(Product, on_delete=models.CASCADE, related_name="test" )
+    product= models.ForeignKey(Product, on_delete=models.CASCADE, related_name="orderedproduct" )
     quantity= models.IntegerField()
-    order= models.ForeignKey(Order, on_delete=models.CASCADE, related_name="test")
+    order= models.ForeignKey(Order, on_delete=models.CASCADE, related_name="madeorder")
+
+    
     
