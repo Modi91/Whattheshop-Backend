@@ -15,11 +15,12 @@ from .serializers import (
 from .models import (
     Product, 
     Category, 
-    OrderProduct
+    OrderProduct,
+    Order
 )
 
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
-
+from rest_framework.response import Response
 
 class UserCreateAPIView(CreateAPIView):
     serializer_class = UserCreateSerializer
@@ -50,8 +51,13 @@ class OrderListView(APIView):
 
     def post(self, request):
         new_data= request.data
-        total= 0
-        for order in new_data:
 
-        print("this is product ",request.data[0]['product'])
-        pass
+        new_order = Order.objects.create(user=request.user)
+        for order in new_data:
+            product= Product.objects.get(id=order['product'])
+            qty = order['quantity']
+            OrderProduct.objects.create(product=product, quantity=qty, order=new_order)
+        
+        new_order.total = sum([order_product.product.price * order_product.quantity for order_product in new_order.madeorder.all()])
+
+        return Response({"msg":"Thank you!"})
