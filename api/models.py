@@ -1,8 +1,6 @@
 from django.db import models
 
-# from django.contrib.auth.models import User
-
-
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -15,7 +13,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=20)
-    price = models.IntegerField()
+    price = models.DecimalField(decimal_places=2, max_digits=10)
     description = models.TextField()
     stock = models.IntegerField()
     img = models.ImageField(upload_to='img_Prodect', null = True)
@@ -27,22 +25,12 @@ class Product(models.Model):
         return self.name
 
 
+class Order(models.Model):
+    user= models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
+    total= models.DecimalField(decimal_places=2,  max_digits=10)
 
-
-# class Stock(models.Model):
-#   """docstring for Stack"""
-#   Prodect = models.ForeignKey(Prodect,on_delete=models.CASCADE,
-#       related_name='orders')
-#   user = models.ForeignKey(User,on_delete=models.CASCADE,
-#       related_name='orders')
-#   quantity = models.IntegerField()
-
-
-# class Cart(models.Model):
-#   """docstring for Cart"""
-#   item = models.ForeignKey(Prodect,on_delete=models.CASCADE,
-#       related_name='orders')
-#   user = models.ForeignKey(User,on_delete=models.CASCADE,
-#       related_name='orders')
-#   total = models.IntegerField()
-
+class OrderProduct(models.Model):
+    product= models.ForeignKey(Product, on_delete=models.CASCADE, related_name="test" )
+    quantity= models.IntegerField()
+    order= models.ForeignKey(Order, on_delete=models.CASCADE, related_name="test")
+    

@@ -8,6 +8,7 @@ from .serializers import (
     CategoryListSerializer,
     ProductListSerializer,
     ProductDetailSerializer,
+    OrderProductSerializer
     )
 
 from .models import Product ,Category

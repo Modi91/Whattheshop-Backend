@@ -2,8 +2,12 @@ from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-
-from .models import Product ,Category
+from .models import (
+    Product,
+    Category,
+    Order,
+    OrderProduct
+    )
 
 class UserCreateSerializer(serializers.ModelSerializer):
 	password = serializers.CharField(write_only=True)
@@ -29,13 +33,14 @@ class CategoryListSerializer(serializers.ModelSerializer):
 class ProductListSerializer(serializers.ModelSerializer):
 	class Meta:
 		model= Product
-		fields= ['name', 'price', 'stock', 'img', ]
+		fields= [ 'id', 'name', 'price', 'stock', 'img', ]
 
 class ProductDetailSerializer(serializers.ModelSerializer):
 	categories= CategoryListSerializer(many=True)
 	class Meta:
 		model= Product
 		fields= [
+			'id',
 			'name',
 			'price',
 			'description',
@@ -46,3 +51,13 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 			'categories'
 		]
 
+class OrderListSerializer(serializers.ModelSerializer):
+	class Meta:
+		model= Order
+		fields= '__all__'
+
+class OrderProductSerializer(serializers.ModelSerializer):
+	order= OrderListSerializer(many=True)
+	class Meta:
+		model= OrderProduct
+		fields= ['product', 'quantity', 'order', ]
