@@ -28,6 +28,8 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
 
 class ProductListSerializer(serializers.ModelSerializer):
+    categories = CategoryListSerializer(many=True)
+
 	class Meta:
 		model = Product
 		fields = [
@@ -36,6 +38,7 @@ class ProductListSerializer(serializers.ModelSerializer):
 			'price',
 			'stock',
 			'img',
+            'categories'
 		]
 
 
