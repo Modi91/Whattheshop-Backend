@@ -51,13 +51,18 @@ class OrderListView(APIView):
 
     def post(self, request):
         new_data= request.data
+        print("this is our user", request)
 
         new_order = Order.objects.create(user=request.user)
         for order in new_data:
             product= Product.objects.get(id=order['product'])
             qty = order['quantity']
             OrderProduct.objects.create(product=product, quantity=qty, order=new_order)
+            
+            product.stock -= qty
+            product.save()
         
         new_order.total = sum([order_product.product.price * order_product.quantity for order_product in new_order.madeorder.all()])
+        new_order.save()
 
-        return Response({"msg":"Thank you!"})
+        return Response({"msg":"Thank you!"}) 
