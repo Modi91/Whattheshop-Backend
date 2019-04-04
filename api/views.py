@@ -47,7 +47,7 @@ class OrderProductView(ListAPIView):
     queryset = OrderProduct.objects.all()
     serializer_class = OrderProductSerializer
 
-class OrderListView(APIView):
+class OrderCreateView(APIView):
 
     def post(self, request):
         new_data= request.data

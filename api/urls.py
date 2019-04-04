@@ -6,7 +6,7 @@ from .views import (
     ProductDetailView,
     CategoryListView,
     OrderProductView,
-    OrderListView,
+    OrderCreateView,
 )
 
 from rest_framework_jwt.views import obtain_jwt_token
@@ -21,6 +21,6 @@ urlpatterns = [
     # 
     path('orders/', OrderProductView.as_view(), name='orders'),
     # 
-    path('checkout/', OrderListView.as_view(), name='ckeckout'),
+    path('create/', OrderCreateView.as_view(), name='order-create'),
 
 ]
