@@ -3,7 +3,6 @@ from django.urls import path
 from .views import (
     UserCreateAPIView,
     ProductListView,
-    ProductDetailView,
     CategoryListView,
     OrderProductView,
     OrderCreateView,
@@ -16,7 +15,6 @@ urlpatterns = [
     path('register/', UserCreateAPIView.as_view(), name='register'),
 
     path('', ProductListView.as_view(), name='list'),
-    path('<int:product_id>/', ProductDetailView.as_view(), name='detail'),
     path('category/', CategoryListView.as_view(), name='category'),
     # 
     path('orders/', OrderProductView.as_view(), name='orders'),
