@@ -9,13 +9,15 @@ from .serializers import (
     CategoryListSerializer,
     ProductListSerializer, 
     OrderProductSerializer, 
+    ImageSerializer
 )
 
 from .models import (
     Product, 
     Category, 
     OrderProduct,
-    Order
+    Order,
+    Image
 )
 
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser

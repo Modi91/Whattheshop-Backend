@@ -6,6 +6,7 @@ from .views import (
     CategoryListView,
     OrderProductView,
     OrderCreateView,
+
 )
 
 from rest_framework_jwt.views import obtain_jwt_token
