@@ -49,21 +49,6 @@ class ProductListSerializer(serializers.ModelSerializer):
     
 
 
-class ProductDetailSerializer(serializers.ModelSerializer):
-    categories = CategoryListSerializer(many=True)
-
-    class Meta:
-        model = Product
-        fields = [
-            'id', 
-            'name', 
-            'price', 
-            'description', 
-            'stock',  
-            'categories'
-        ]
-
-
 class OrderListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
@@ -71,14 +56,15 @@ class OrderListSerializer(serializers.ModelSerializer):
 
 
 class OrderProductSerializer(serializers.ModelSerializer):
-    order = OrderListSerializer()
-    product = ProductDetailSerializer()
-    class Meta:
-        model = OrderProduct
-        fields = [
-            'product',
-            'quantity',
-            'order',
-        ]
+	order = OrderListSerializer()
+	product = ProductListSerializer()
+	class Meta:
+		model = OrderProduct
+		fields = [
+			'product',
+			'quantity',
+			'order',
+		]
+
 
 

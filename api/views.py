@@ -1,14 +1,13 @@
 from rest_framework.generics import (
     CreateAPIView,
     ListAPIView,
-    RetrieveAPIView,
 )
+
 from rest_framework.views import APIView
 from .serializers import (
     UserCreateSerializer, 
     CategoryListSerializer,
     ProductListSerializer, 
-    ProductDetailSerializer,
     OrderProductSerializer, 
     ImageSerializer
 )
@@ -38,22 +37,16 @@ class ProductListView(ListAPIView):
     serializer_class = ProductListSerializer
 
 
-class ProductDetailView(RetrieveAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductDetailSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'product_id'
-
-
 class OrderProductView(ListAPIView):
     queryset = OrderProduct.objects.all()
     serializer_class = OrderProductSerializer
 
-class OrderListView(APIView):
+
+class OrderCreateView(APIView):
 
     def post(self, request):
         new_data= request.data
-        print("this is our user", request)
+        # print("this is our user", request)
 
         new_order = Order.objects.create(user=request.user)
         for order in new_data:
@@ -68,8 +61,3 @@ class OrderListView(APIView):
         new_order.save()
 
         return Response({"msg":"Thank you!"}) 
-
-class ImageView(ListAPIView):
-    queryset = Image.objects.all()
-    serializer_class = ImageSerializer
-    
