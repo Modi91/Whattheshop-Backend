@@ -10,13 +10,15 @@ from .serializers import (
     ProductListSerializer, 
     ProductDetailSerializer,
     OrderProductSerializer, 
+    ImageSerializer
 )
 
 from .models import (
     Product, 
     Category, 
     OrderProduct,
-    Order
+    Order,
+    Image
 )
 
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
@@ -66,3 +68,8 @@ class OrderListView(APIView):
         new_order.save()
 
         return Response({"msg":"Thank you!"}) 
+
+class ImageView(ListAPIView):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
+    
