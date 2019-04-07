@@ -41,6 +41,7 @@ class ProductListSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'price',
+            'description',
             'stock',
             'images',
             'categories'
