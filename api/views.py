@@ -43,21 +43,35 @@ class OrderProductView(ListAPIView):
 
 
 class OrderCreateView(APIView):
-
     def post(self, request):
         new_data= request.data
-        # print("this is our user", request)
-
-        new_order = Order.objects.create(user=request.user)
+        print("I'm inside the create view")
+        new_order, created = Order.objects.get_or_create(user=request.user, complete=False)
+        response = []
         for order in new_data:
             product= Product.objects.get(id=order['product'])
             qty = order['quantity']
-            OrderProduct.objects.create(product=product, quantity=qty, order=new_order)
-            
-            product.stock -= qty
-            product.save()
-        
-        new_order.total = sum([order_product.product.price * order_product.quantity for order_product in new_order.madeorder.all()])
-        new_order.save()
+    
+            if (qty > product.stock):
+                response.append({ product.name:"There is only %s left from %s" % (product.stock, product.name) })
+            else:
+                order_product, created=OrderProduct.objects.get_or_create(product=product, order=new_order)
+                if created:
+                    order_product.quantity= qty
+                    product.stock -= qty
 
-        return Response({"msg":"Thank you!"}) 
+                else:
+                    product.stock += order_product.quantity
+                    order_product.quantity= qty
+                    product.stock -= qty
+                product.save()
+                order_product.save()
+
+        if len(response)>0:
+            return Response({"response":response})
+        else:
+            new_order.total = sum([order_product.product.price * order_product.quantity for order_product in new_order.madeorder.all()])
+            new_order.complete = True
+            new_order.save()
+
+        return Response({"response":True}) 
