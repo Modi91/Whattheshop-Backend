@@ -6,9 +6,9 @@ from .models import (
 	Category, 
 	Order, 
 	OrderProduct, 
-  Profile,
+    Profile,
 	Image
-	)
+)
 
 
 
@@ -63,25 +63,14 @@ class ProductListSerializer(serializers.ModelSerializer):
         model = Product
         fields = [
             'id',
-            'name',
-            'price',
-            'stock',
-            'img',
-        ]
-
-
-class ProductDetailSerializer(serializers.ModelSerializer):
-    categories = CategoryListSerializer(many=True)
-
-    class Meta:
-        model = Product
-        fields = [
-            'id', 'name', 'price', 
-            'description',
-            'stock',
+			'name',
+			'price',
+			'description',
+			'stock',
             'images',
-            'categories'
+			'categories'
         ]
+
     
 
 class OrderListSerializer(serializers.ModelSerializer):
@@ -92,7 +81,7 @@ class OrderListSerializer(serializers.ModelSerializer):
 
 class OrderProductSerializer(serializers.ModelSerializer):
     order = OrderListSerializer()
-    product = ProductDetailSerializer()
+    product = ProductListSerializer()
     class Meta:
         model = OrderProduct
         fields = [

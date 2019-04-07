@@ -82,7 +82,6 @@ class OrderCreateView(APIView):
         return Response({"response":True})
 
 
-
 class ProfileUpdateView(RetrieveAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileUpdateSerializer
@@ -100,8 +99,6 @@ class ProfileUpdateView(RetrieveAPIView):
         return Response({"msg":"Thank you!"}) 
     
         
-
-
 class ProfileView(RetrieveAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer

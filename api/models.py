@@ -15,7 +15,7 @@ class Product(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=10)
     description = models.TextField()
     stock = models.IntegerField()
-    categories =  models.ManyToManyField( Category, related_name='prodects')
+    categories =  models.ManyToManyField( Category, related_name='products')
 
     def __str__(self):
         return self.name
@@ -28,7 +28,6 @@ class Image(models.Model):
     def __str__(self):
         return self.product.name
     
-
 
 class Order(models.Model):
     user= models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
