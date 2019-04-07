@@ -2,7 +2,13 @@ from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import (Product, Category, Order, OrderProduct, Image)
+from .models import (
+	Product, 
+	Category, 
+	Order, 
+	OrderProduct, 
+	Image
+	)
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -46,8 +52,6 @@ class ProductListSerializer(serializers.ModelSerializer):
             'categories'
         ]
     
-    
-
 
 class OrderListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -65,6 +69,5 @@ class OrderProductSerializer(serializers.ModelSerializer):
 			'quantity',
 			'order',
 		]
-
 
 
