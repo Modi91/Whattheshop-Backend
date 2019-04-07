@@ -1,6 +1,7 @@
 from rest_framework.generics import (
     CreateAPIView,
     ListAPIView,
+    RetrieveAPIView
 )
 
 from rest_framework.views import APIView
@@ -10,7 +11,8 @@ from .serializers import (
     ProductListSerializer, 
     OrderProductSerializer, 
     ProfileUpdateSerializer,
-    ImageSerializer
+    ImageSerializer,
+    ProfileSerializer
 )
 
 from .models import (
