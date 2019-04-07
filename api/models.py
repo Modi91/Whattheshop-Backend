@@ -34,5 +34,10 @@ class OrderProduct(models.Model):
     quantity= models.IntegerField()
     order= models.ForeignKey(Order, on_delete=models.CASCADE, related_name="madeorder")
 
-    
+class Profile (models.Model):  
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    img = models.ImageField(upload_to='profile_img', null = True)
+    city = models.CharField(max_length=120, null=True)
+    district = models.CharField(max_length=20, null=True)
+    zip_code = models.IntegerField(max_length= 99999, null=True)
     

@@ -10,14 +10,18 @@ from .serializers import (
     ProductListSerializer, 
     ProductDetailSerializer,
     OrderProductSerializer, 
+    ProfileUpdateSerializer,
+    ProfileSerializer
 )
 
 from .models import (
     Product, 
     Category, 
     OrderProduct,
-    Order
+    Order ,
+    Profile
 )
+from django.contrib.auth.models import User
 
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
@@ -66,3 +70,34 @@ class OrderListView(APIView):
         new_order.save()
 
         return Response({"msg":"Thank you!"}) 
+
+
+class ProfileUpdateView(RetrieveAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileUpdateSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'profile_id'
+
+    def put(self, request , profile_id):
+        new_data= request.data
+        new_user =  new_data['user']
+        new_profile =  new_data['profile']
+        profile = Profile.objects.filter(id =profile_id)
+        profile.update(**new_profile)
+        User.objects.filter(id=profile.first().user.id).update(**new_user)
+       
+        return Response({"msg":"Thank you!"}) 
+    
+        
+
+
+class ProfileView(RetrieveAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'profile_id'
+
+
+
+
+
