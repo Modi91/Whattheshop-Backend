@@ -1,8 +1,15 @@
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from .models import (
+	Product, 
+	Category, 
+	Order, 
+	OrderProduct, 
+  Profile,
+	Image
+	)
 
-from .models import (Product, Category, Order, OrderProduct ,Profile)
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -11,6 +18,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'password', 'first_name','last_name','email']
+
 
     def create(self, validated_data):
         username = validated_data['username']
@@ -43,8 +51,14 @@ class CategoryListSerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = '__all__'
 
 class ProductListSerializer(serializers.ModelSerializer):
+    categories = CategoryListSerializer(many=True)
+    images = ImageSerializer(many=True)
     class Meta:
         model = Product
         fields = [
@@ -62,10 +76,13 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'id', 'name', 'price', 'description', 'stock', 'img', 'img2',
-            'img3', 'categories'
+            'id', 'name', 'price', 
+            'description',
+            'stock',
+            'images',
+            'categories'
         ]
-
+    
 
 class OrderListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -89,6 +106,5 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['id','user','city','district','zip_code']
-
 
 

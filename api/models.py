@@ -9,18 +9,26 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
+
 class Product(models.Model):
     name = models.CharField(max_length=20)
     price = models.DecimalField(decimal_places=2, max_digits=10)
     description = models.TextField()
     stock = models.IntegerField()
-    img = models.ImageField(upload_to='img_Prodect', null = True)
-    img2 = models.ImageField(upload_to='img_Prodect', null = True)
-    img3= models.ImageField(upload_to='img_Prodect', null = True)
     categories =  models.ManyToManyField( Category, related_name='prodects')
 
     def __str__(self):
         return self.name
+
+
+class Image(models.Model):
+    product = models.ForeignKey(Product, default=1, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to='img_Prodect', null= True)
+
+    def __str__(self):
+        return self.product.name
+    
+
 
 class Order(models.Model):
     user= models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
@@ -28,6 +36,7 @@ class Order(models.Model):
 
     def __str__(self):
         return self.user.username
+
 
 class OrderProduct(models.Model):
     product= models.ForeignKey(Product, on_delete=models.CASCADE, related_name="orderedproduct" )
@@ -41,3 +50,4 @@ class Profile (models.Model):
     district = models.CharField(max_length=20, null=True)
     zip_code = models.IntegerField(max_length= 99999, null=True)
     
+
