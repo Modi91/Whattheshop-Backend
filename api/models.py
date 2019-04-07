@@ -33,6 +33,7 @@ class Image(models.Model):
 class Order(models.Model):
     user= models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     total= models.DecimalField(decimal_places=2,  max_digits=10, default=0)
+    complete = models.BooleanField(default=True)
 
     def __str__(self):
         return self.user.username
@@ -40,7 +41,7 @@ class Order(models.Model):
 
 class OrderProduct(models.Model):
     product= models.ForeignKey(Product, on_delete=models.CASCADE, related_name="orderedproduct" )
-    quantity= models.IntegerField()
+    quantity= models.IntegerField(null=True)
     order= models.ForeignKey(Order, on_delete=models.CASCADE, related_name="madeorder")
 
 class Profile (models.Model):  
