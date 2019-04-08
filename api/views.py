@@ -58,7 +58,7 @@ class OrderCreateView(APIView):
             qty = order['quantity']
     
             if (qty > product.stock):
-                response.append({ product.name:"There is only %s left from %s" % (product.stock, product.name) })
+                response.append("There is only %s left from %s" % (product.stock, product.name))
             else:
                 order_product, created=OrderProduct.objects.get_or_create(product=product, order=new_order)
                 if created:
