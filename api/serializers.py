@@ -37,10 +37,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields =['id','username' ,'first_name','last_name','email']
+        fields =['username' ,'first_name','last_name','email']
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):
-    user = UserUpdateSerializer()
+    user = UserUpdateSerializer() 
     class Meta:
         model = Profile
         fields = ['user','city','district','zip_code']
@@ -90,10 +90,5 @@ class OrderProductSerializer(serializers.ModelSerializer):
             'order',
         ]
 
-class ProfileSerializer(serializers.ModelSerializer):
-    user = UserUpdateSerializer()
-    class Meta:
-        model = Profile
-        fields = ['id','user','city','district','zip_code']
 
 

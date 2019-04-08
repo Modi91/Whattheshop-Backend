@@ -1,5 +1,4 @@
 from django.db import models
-
 from django.contrib.auth.models import User
 
 
@@ -42,6 +41,7 @@ class OrderProduct(models.Model):
     product= models.ForeignKey(Product, on_delete=models.CASCADE, related_name="orderedproduct" )
     quantity= models.IntegerField(null=True)
     order= models.ForeignKey(Order, on_delete=models.CASCADE, related_name="madeorder")
+
 
 class Profile (models.Model):  
     user = models.OneToOneField(User, on_delete=models.CASCADE)

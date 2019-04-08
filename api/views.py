@@ -3,7 +3,6 @@ from rest_framework.generics import (
     ListAPIView,
     RetrieveAPIView
 )
-
 from rest_framework.views import APIView
 from .serializers import (
     UserCreateSerializer, 
@@ -12,9 +11,8 @@ from .serializers import (
     OrderProductSerializer, 
     ProfileUpdateSerializer,
     ImageSerializer,
-    ProfileSerializer
+    
 )
-
 from .models import (
     Product, 
     Category, 
@@ -24,9 +22,9 @@ from .models import (
     Image
 )
 from django.contrib.auth.models import User
-
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
+
 
 class UserCreateAPIView(CreateAPIView):
     serializer_class = UserCreateSerializer
@@ -50,7 +48,6 @@ class OrderProductView(ListAPIView):
 class OrderCreateView(APIView):
     def post(self, request):
         new_data= request.data
-        print("I'm inside the create view")
         new_order, created = Order.objects.get_or_create(user=request.user, complete=False)
         response = []
         for order in new_data:
@@ -82,26 +79,22 @@ class OrderCreateView(APIView):
         return Response({"response":True})
 
 
-class ProfileUpdateView(RetrieveAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileUpdateSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'profile_id'
-
-    def put(self, request , profile_id):
+class ProfileUpdateView(APIView):
+    def put(self, request ):
         new_data= request.data
         new_user =  new_data['user']
         new_profile =  new_data['profile']
-        profile = Profile.objects.filter(id =profile_id)
+        profile = Profile.objects.filter(user = self.request.user)
         profile.update(**new_profile)
         User.objects.filter(id=profile.first().user.id).update(**new_user)
-       
         return Response({"msg":"Thank you!"}) 
     
         
-class ProfileView(RetrieveAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'profile_id'
+class ProfileView(APIView):    
+    def get(self,request):
+        # Response({"response":ProfileUpdateSerializer(self.request.user.profile).data})
+        profile = ProfileUpdateSerializer(self.request.user.profile).data
+        # user = profile['user']
+        # print( user['username'])
+        return Response (ProfileUpdateSerializer(self.request.user.profile).data)
 
