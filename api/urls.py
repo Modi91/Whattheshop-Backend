@@ -8,6 +8,8 @@ from .views import (
     ProfileUpdateView,
     ProfileView ,
     OrderCreateView,
+    
+    
 )
 
 from rest_framework_jwt.views import obtain_jwt_token
@@ -22,7 +24,6 @@ urlpatterns = [
     path('', ProductListView.as_view(), name='list'),
     
     path('category/', CategoryListView.as_view(), name='category'),
-
     # 
     path('orders/', OrderProductView.as_view(), name='orders'),
     # 

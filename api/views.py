@@ -12,7 +12,9 @@ from .serializers import (
     OrderProductSerializer, 
     ProfileUpdateSerializer,
     ImageSerializer,
-    ProfileSerializer
+    ProfileSerializer,
+    OrderListSerializer,
+    
 )
 
 from .models import (
@@ -42,9 +44,11 @@ class ProductListView(ListAPIView):
     serializer_class = ProductListSerializer
 
 
+
 class OrderProductView(ListAPIView):
-    queryset = OrderProduct.objects.all()
-    serializer_class = OrderProductSerializer
+    queryset = Order.objects.all()
+    serializer_class = OrderListSerializer
+
 
 
 class OrderCreateView(APIView):
