@@ -53,28 +53,29 @@ class OrderProductView(ListAPIView):
 
 class OrderCreateView(APIView):
     def post(self, request):
-        new_data= request.data
-        print("I'm inside the create view")
         new_order, created = Order.objects.get_or_create(user=request.user, complete=False)
         response = []
-        for order in new_data:
+        error = "There is only {} left from {}"
+        for order in request.data:
             product= Product.objects.get(id=order['product'])
             qty = order['quantity']
-    
-            if (qty > product.stock):
-                response.append("There is only %s left from %s" % (product.stock, product.name))
-            else:
-                order_product, created=OrderProduct.objects.get_or_create(product=product, order=new_order)
-                if created:
-                    order_product.quantity= qty
-                    product.stock -= qty
-
+            order_product, created=OrderProduct.objects.get_or_create(product=product, order=new_order)
+            
+            if created:
+                if (qty > product.stock):
+                    response.append(error.format(product.stock, product.name))
+                    order_product.delete()
                 else:
-                    product.stock += order_product.quantity
                     order_product.quantity= qty
                     product.stock -= qty
-                product.save()
+                    order_product.save()
+            elif (qty > product.stock+order_product.quantity):
+                    response.append(error.format(product.stock, product.name))
+            else:
+                product.stock += order_product.quantity - qty
+                order_product.quantity = qty
                 order_product.save()
+            product.save()
 
         if len(response)>0:
             return Response({"response":response})
@@ -82,8 +83,7 @@ class OrderCreateView(APIView):
             new_order.total = sum([order_product.product.price * order_product.quantity for order_product in new_order.madeorder.all()])
             new_order.complete = True
             new_order.save()
-
-        return Response({"response":True})
+            return Response({"response":True})
 
 
 class ProfileUpdateView(RetrieveAPIView):
