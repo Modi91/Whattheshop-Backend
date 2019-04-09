@@ -83,7 +83,7 @@ class OrderCreateView(APIView):
             new_order.total = sum([order_product.product.price * order_product.quantity for order_product in new_order.madeorder.all()])
             new_order.complete = True
             new_order.save()
-            return Response({"response":True})
+            return Response({"response":[True]})
 
 
 class ProfileUpdateView(RetrieveAPIView):
