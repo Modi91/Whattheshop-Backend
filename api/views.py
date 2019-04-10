@@ -11,7 +11,7 @@ from .serializers import (
     OrderProductSerializer, 
     ProfileUpdateSerializer,
     ImageSerializer,
-    
+    ProfileSerializer,
 )
 from .models import (
     Product, 
@@ -83,18 +83,20 @@ class ProfileUpdateView(APIView):
     def put(self, request ):
         new_data= request.data
         new_user =  new_data['user']
-        new_profile =  new_data['profile']
+        new_city =  new_data['city']
+        new_district =  new_data['district']
+        new_zipcode =  new_data['zip_code']
         profile = Profile.objects.filter(user = self.request.user)
-        profile.update(**new_profile)
-        User.objects.filter(id=profile.first().user.id).update(**new_user)
-        return Response({"msg":"Thank you!"}) 
+        serializerprofile = ProfileUpdateSerializer(data=new_data)
+        if (serializerprofile.is_valid):
+            profile.update(**{'city':new_city ,'district':new_district ,'zip_code':new_zipcode})
+            User.objects.filter(id=profile.first().user.id).update(**new_user)
+            return Response({"Updated Thank you!"}) 
+        else :
+            return Response({"error"})     
     
         
 class ProfileView(APIView):    
     def get(self,request):
-        # Response({"response":ProfileUpdateSerializer(self.request.user.profile).data})
-        profile = ProfileUpdateSerializer(self.request.user.profile).data
-        # user = profile['user']
-        # print( user['username'])
-        return Response (ProfileUpdateSerializer(self.request.user.profile).data)
+        return Response (ProfileSerializer(self.request.user.profile).data)
 

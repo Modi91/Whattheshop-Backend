@@ -29,7 +29,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         new_user = User(username=username , first_name=fname ,last_name=lname ,email=email)
         new_user.set_password(password)
         new_user.save()
-        new_profile = Profile(user=new_user) #objects create
+        new_profile = Profile(user=new_user) 
         new_profile.save()
         return validated_data
 
@@ -37,10 +37,22 @@ class UserCreateSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields =['username' ,'first_name','last_name','email']
+        fields =['first_name','last_name','email']
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):
     user = UserUpdateSerializer() 
+    class Meta:
+        model = Profile
+        fields = ['user','city','district','zip_code']
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields =['username' ,'first_name','last_name','email']
+
+class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer() 
     class Meta:
         model = Profile
         fields = ['user','city','district','zip_code']
