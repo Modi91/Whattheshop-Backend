@@ -68,6 +68,7 @@ class ImageSerializer(serializers.ModelSerializer):
         model = Image
         fields = '__all__'
 
+
 class ProductListSerializer(serializers.ModelSerializer):
     categories = CategoryListSerializer(many=True)
     images = ImageSerializer(many=True)
@@ -83,24 +84,28 @@ class ProductListSerializer(serializers.ModelSerializer):
 			'categories'
         ]
 
-    
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['name', 'price', 'stock', ]
+
+class OrderProductSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+
+    class Meta:
+        model = OrderProduct
+        fields = ['product',
+            'quantity',
+            ]
 
 class OrderListSerializer(serializers.ModelSerializer):
+    madeorder = OrderProductSerializer(many=True)
     class Meta:
         model = Order
         fields = '__all__'
 
 
-class OrderProductSerializer(serializers.ModelSerializer):
-    order = OrderListSerializer()
-    product = ProductListSerializer()
-    class Meta:
-        model = OrderProduct
-        fields = [
-            'product',
-            'quantity',
-            'order',
-        ]
 
 
 
