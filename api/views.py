@@ -3,7 +3,6 @@ from rest_framework.generics import (
     ListAPIView,
     RetrieveAPIView
 )
-
 from rest_framework.views import APIView
 from .serializers import (
     UserCreateSerializer, 
@@ -14,9 +13,8 @@ from .serializers import (
     ImageSerializer,
     ProfileSerializer,
     OrderListSerializer,
-    
-)
 
+)
 from .models import (
     Product, 
     Category, 
@@ -26,9 +24,9 @@ from .models import (
     Image
 )
 from django.contrib.auth.models import User
-
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
+
 
 class UserCreateAPIView(CreateAPIView):
     serializer_class = UserCreateSerializer
@@ -86,26 +84,24 @@ class OrderCreateView(APIView):
             return Response({"response":[True]})
 
 
-class ProfileUpdateView(RetrieveAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileUpdateSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'profile_id'
-
-    def put(self, request , profile_id):
+class ProfileUpdateView(APIView):
+    def put(self, request ):
         new_data= request.data
         new_user =  new_data['user']
-        new_profile =  new_data['profile']
-        profile = Profile.objects.filter(id =profile_id)
-        profile.update(**new_profile)
-        User.objects.filter(id=profile.first().user.id).update(**new_user)
-       
-        return Response({"msg":"Thank you!"}) 
+        new_city =  new_data['city']
+        new_district =  new_data['district']
+        new_zipcode =  new_data['zip_code']
+        profile = Profile.objects.filter(user = self.request.user)
+        serializerprofile = ProfileUpdateSerializer(data=new_data)
+        if (serializerprofile.is_valid):
+            profile.update(**{'city':new_city ,'district':new_district ,'zip_code':new_zipcode})
+            User.objects.filter(id=profile.first().user.id).update(**new_user)
+            return Response({"Updated Thank you!"}) 
+        else :
+            return Response({"error"})     
     
         
-class ProfileView(RetrieveAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'profile_id'
+class ProfileView(APIView):    
+    def get(self,request):
+        return Response (ProfileSerializer(self.request.user.profile).data)
 
