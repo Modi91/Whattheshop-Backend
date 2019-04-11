@@ -95,9 +95,6 @@ class OrderCreateView(APIView):
 
             json_response= response.json()
 
-            print(json_response['transaction']['url'])
-
-
             return Response({"response":[True], "link": json_response['transaction']['url']})
 
 
