@@ -27,6 +27,7 @@ from django.contrib.auth.models import User
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
+import requests
 
 class UserCreateAPIView(CreateAPIView):
     serializer_class = UserCreateSerializer
@@ -76,12 +77,28 @@ class OrderCreateView(APIView):
             product.save()
 
         if len(response)>0:
-            return Response({"response":response})
+            return Response({"response":response, "link": None})
         else:
             new_order.total = sum([order_product.product.price * order_product.quantity for order_product in new_order.madeorder.all()])
             new_order.complete = True
             new_order.save()
-            return Response({"response":[True]})
+
+            url = "https://api.tap.company/v2/charges"
+
+            payload = "{\"amount\":%s,\"currency\":\"SAR\",\"threeDSecure\":false,\"save_card\":false,\"description\":\"Test Description\",\"statement_descriptor\":\"Sample\",\"metadata\":{\"udf1\":\"test 1\",\"udf2\":\"test 2\"},\"reference\":{\"transaction\":\"txn_0001\",\"order\":\"ord_0001\"},\"receipt\":{\"email\":false,\"sms\":true},\"customer\":{\"first_name\":\"%s\",\"middle_name\":\"test\",\"last_name\":\"test\",\"email\":\"test@test.com\",\"phone\":{\"country_code\":\"965\",\"number\":\"50000000\"}},\"source\":{\"id\":\"src_all\"},\"post\":{\"url\":\"http://your_website.com/post_url\"},\"redirect\":{\"url\":\"http://localhost:3000\"}}"%(new_order.total, new_order.user.username)
+            headers = {
+                'authorization': "Bearer sk_test_XKokBfNWv6FIYuTMg5sLPjhJ",
+                'content-type': "application/json"
+                }
+
+            response = requests.request("POST", url, data=payload, headers=headers)
+
+            json_response= response.json()
+
+            print(json_response['transaction']['url'])
+
+
+            return Response({"response":[True], "link": json_response['transaction']['url']})
 
 
 class ProfileUpdateView(APIView):
